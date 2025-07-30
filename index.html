@@ -27,7 +27,7 @@
             color: #e2e8f0; /* Light Gray Text */
         }
 
-        /* UPDATED: Modern font for titles */
+        /* Modern font for titles */
         h1, h2, h3 {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
@@ -53,7 +53,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Custom button styles - UPDATED */
+        /* Custom button styles */
         .btn {
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -78,16 +78,17 @@
             background-color: #D27D71; /* Darker Soft Red */
         }
         
+        /* UPDATED: Secondary button color */
         .btn-secondary {
-            background-color: #3D5F47; /* Green color from the brand */
+            background-color: #C0392B; /* Deeper Red */
             color: white;
         }
 
         .btn-secondary:hover {
-            background-color: #2c4b34;
+            background-color: #A93226; /* Even Deeper Red */
         }
         
-        /* Outline Button - UPDATED */
+        /* Outline Button */
         .btn-outline {
             background-color: transparent;
             border: 2px solid #D98880;
@@ -101,7 +102,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Form input styling - UPDATED */
+        /* Form input styling */
         .form-input {
             background-color: #1E293B; /* Dark Slate */
             border: 1px solid #334155; /* Slate Border */
@@ -128,22 +129,10 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             border-radius: 1rem;
             overflow: hidden;
-            cursor: grab;
         }
-        .canvas-container-wrapper:active {
-            cursor: grabbing;
-        }
-        
-        #canvas-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
-        #logo-canvas {
-            position: relative;
-            z-index: 1;
+        /* The direct child of this wrapper is the fabric.js container */
+        .canvas-container-wrapper > .canvas-container {
+             border-radius: 1rem;
         }
         
         /* Fade-in animation on scroll */
@@ -229,7 +218,6 @@
                 <!-- Canvas Area -->
                 <div class="w-full lg:w-1/2 flex justify-center items-center">
                     <div class="canvas-container-wrapper">
-                         <canvas id="canvas-background"></canvas>
                          <canvas id="logo-canvas"></canvas>
                     </div>
                 </div>
@@ -357,37 +345,34 @@
 
             // --- INITIALIZATION ---
 
-            // Initialize both canvases
-            const bgCanvasEl = document.getElementById('canvas-background');
             const logoCanvasEl = document.getElementById('logo-canvas');
             const container = document.querySelector('.canvas-container-wrapper');
 
-            // Set background image
-            const bgImg = new Image();
-            bgImg.crossOrigin = "anonymous"; // Important for canvas export
-            bgImg.src = packageImageUrl;
-            bgImg.onload = () => {
-                const aspectRatio = bgImg.naturalWidth / bgImg.naturalHeight;
-                let containerWidth = container.clientWidth;
-                // On small screens, ensure canvas is not too small
-                if (containerWidth < 300) containerWidth = 300;
-                
-                const canvasWidth = containerWidth;
-                const canvasHeight = containerWidth / aspectRatio;
+            // Set initial canvas size based on container
+            let containerWidth = container.clientWidth;
+            if (containerWidth < 300) containerWidth = 300;
+            
+            // Initialize Fabric.js on the single canvas
+            fabricCanvas = new fabric.Canvas('logo-canvas', {
+                width: containerWidth,
+                height: containerWidth, // Start with a square, will be resized
+            });
 
-                // Set size for both canvases
-                bgCanvasEl.width = logoCanvasEl.width = canvasWidth;
-                bgCanvasEl.height = logoCanvasEl.height = canvasHeight;
-                
-                const bgCtx = bgCanvasEl.getContext('2d');
-                bgCtx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
+            // Load the background image and set canvas dimensions based on its aspect ratio
+            fabric.Image.fromURL(packageImageUrl, (bgImg) => {
+                const aspectRatio = bgImg.width / bgImg.height;
+                const canvasWidth = container.clientWidth;
+                const canvasHeight = canvasWidth / aspectRatio;
 
-                // Initialize Fabric.js on the top canvas
-                fabricCanvas = new fabric.Canvas('logo-canvas', {
-                    width: canvasWidth,
-                    height: canvasHeight,
+                fabricCanvas.setWidth(canvasWidth);
+                fabricCanvas.setHeight(canvasHeight);
+                
+                fabricCanvas.setBackgroundImage(bgImg, fabricCanvas.renderAll.bind(fabricCanvas), {
+                    scaleX: canvasWidth / bgImg.width,
+                    scaleY: canvasHeight / bgImg.height,
                 });
-            };
+            }, { crossOrigin: 'anonymous' });
+            
             
             // --- EVENT LISTENERS ---
 
@@ -500,25 +485,13 @@
 
             // Download preview
             downloadButton.addEventListener('click', () => {
-                // Create a temporary canvas to merge background and logo
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = bgCanvasEl.width;
-                tempCanvas.height = bgCanvasEl.height;
-                const tempCtx = tempCanvas.getContext('2d');
-
-                // Draw background image
-                tempCtx.drawImage(bgCanvasEl, 0, 0);
-
-                // Draw fabric.js canvas on top
                 // De-select object to hide controls before exporting
                 fabricCanvas.discardActiveObject();
                 fabricCanvas.renderAll();
-                tempCtx.drawImage(fabricCanvas.getElement(), 0, 0);
-
-                // Trigger download
+                
                 const link = document.createElement('a');
                 link.download = 'projekt-kawy-cafe-zinia.png';
-                link.href = tempCanvas.toDataURL('image/png');
+                link.href = fabricCanvas.toDataURL({ format: 'png', quality: 1.0 });
                 link.click();
             });
             
