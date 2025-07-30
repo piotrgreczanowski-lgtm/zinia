@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Zinia - Stwórz Kawę z Własnym Logo</title>
+    
+    <!-- Favicon (Inline SVG) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Fabric.js for Canvas Manipulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+    <style>
+        /* Custom Styles for a Premium Feel */
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #0F172A; /* Navy Blue */
+            color: #e2e8f0; /* Light Gray Text */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Hero section background - UPDATED */
+        .hero-section {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://i.ibb.co/MxBG6xvd/DSCF4826.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Glassmorphism effect for controls */
+        .glass-controls {
+            background: rgba(30, 41, 59, 0.5); /* Darker glass */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom button styles */
+        .btn {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #F97316; /* Vibrant Orange */
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #EA580C; /* Darker Orange */
+        }
+        
+        .btn-secondary {
+            background-color: #3D5F47; /* Green color from the brand */
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2c4b34;
+        }
+        
+        /* NEW Outline Button */
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #F97316;
+            color: #F97316;
+        }
+
+        .btn-outline:hover {
+            background-color: #F97316;
+            color: white;
+        }
+
+        /* Form input styling */
+        .form-input {
+            background-color: #1E293B; /* Dark Slate */
+            border: 1px solid #334155; /* Slate Border */
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: #64748B;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #F97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
+        }
+        
+        /* Canvas container styling */
+        .canvas-container-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Adjust as needed */
+            margin: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        #canvas-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        #logo-canvas {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Fade-in animation on scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-900">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#">
+                <img src="https://i.ibb.co/1V6gxCN/70-0-storefront-Images-32e778f9-749e-4a6a-9d71-db416c8ce84d.png" alt="Logo Cafe Zinia" class="h-10 md:h-12 transition-all duration-300">
+            </a>
+            <nav class="flex items-center gap-2 sm:gap-4">
+                <a href="https://cafezinia.com/" target="_blank" class="btn btn-outline px-3 py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm md:text-base font-semibold">
+                    Odwiedź Sklep
+                </a>
+                <a href="#wizualizator" class="btn btn-primary px-3 py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm md:text-base font-semibold">
+                    Stwórz swoją kawę
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section h-screen flex items-center justify-center text-white pt-20">
+        <div class="text-center px-4">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 text-slate-100" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">Kawa z Twoim Logo.</h1>
+            <p class="text-lg md:text-2xl max-w-3xl mx-auto mb-8 text-slate-300" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">Wyróżnij swoją markę z aromatem najlepszej kawy. Stwórz niezapomniany upominek dla klientów i partnerów.</p>
+            <a href="#wizualizator" class="btn btn-primary px-8 py-4 rounded-full text-lg font-bold">
+                Zaprojektuj teraz
+            </a>
+        </div>
+    </section>
+
+    <!-- How it works Section -->
+    <section class="py-16 md:py-24 bg-slate-800 fade-in-section">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-100 mb-4">To Prostsze Niż Myślisz</h2>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-12">W trzech prostych krokach stworzysz kawę idealnie dopasowaną do Twojej marki.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="flex flex-col items-center">
+                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">1. Wgraj logo</h3>
+                    <p class="text-slate-400">Dodaj plik z Twoim logo w formacie PNG lub JPG.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">2. Dopasuj projekt</h3>
+                    <p class="text-slate-400">Przesuwaj, skaluj i obracaj logo, aby idealnie pasowało.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">3. Wyślij zapytanie</h3>
+                    <p class="text-slate-400">Wypełnij formularz, a my skontaktujemy się z Tobą z ofertą.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualizer Section -->
+    <section id="wizualizator" class="py-16 md:py-24 bg-slate-900 fade-in-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-12">Stwórz Swój Projekt</h2>
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+                
+                <!-- Canvas Area -->
+                <div class="w-full lg:w-1/2 flex justify-center items-center">
+                    <div class="canvas-container-wrapper">
+                         <canvas id="canvas-background"></canvas>
+                         <canvas id="logo-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Controls Area -->
+                <div class="w-full lg:w-1/2">
+                    <div class="glass-controls p-6 md:p-8 rounded-2xl">
+                        <h3 class="text-2xl font-semibold mb-6 text-slate-100">Panel Sterowania</h3>
+                        
+                        <!-- File Upload -->
+                        <div class="mb-6">
+                            <label for="logo-upload" class="btn btn-secondary w-full text-center py-3 px-4 rounded-lg cursor-pointer">
+                                <span>Wgraj swoje logo (PNG/JPG)</span>
+                                <input type="file" id="logo-upload" class="hidden" accept="image/png, image/jpeg">
+                            </label>
+                            <p id="logo-message" class="text-sm text-center mt-2 text-slate-400">Nie wybrano pliku.</p>
+                        </div>
+
+                        <!-- Manipulation Controls -->
+                        <div id="manipulation-controls" class="hidden">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <!-- Scale -->
+                                <div>
+                                    <label for="scale-slider" class="block text-sm font-medium text-slate-300 mb-1">Rozmiar</label>
+                                    <input id="scale-slider" type="range" min="0.1" max="3" value="1" step="0.05" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#F97316]">
+                                </div>
+                                <!-- Rotation -->
+                                <div>
+                                    <label for="rotation-slider" class="block text-sm font-medium text-slate-300 mb-1">Obrót</label>
+                                    <input id="rotation-slider" type="range" min="-180" max="180" value="0" step="1" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#F97316]">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <button id="reset-button" class="btn bg-slate-600 text-slate-100 hover:bg-slate-500 w-full py-3 rounded-lg">Resetuj</button>
+                                <button id="remove-button" class="btn bg-red-600 text-white hover:bg-red-700 w-full py-3 rounded-lg">Usuń Logo</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                         <button id="download-button" class="btn btn-primary px-8 py-4 rounded-full text-lg font-bold w-full md:w-auto">Pobierz Podgląd</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- NEW: Our Projects Section -->
+    <section id="realizacje" class="py-16 md:py-24 bg-slate-800 fade-in-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-12">Nasze Realizacje</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-slate-700/50 p-4 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://i.ibb.co/84TRGrK0/Whats-App-Image-2025-07-24-at-14-25-51.jpg" alt="Realizacja projektu kawy z logo klienta 1" class="rounded-lg w-full h-auto">
+                </div>
+                <div class="bg-slate-700/50 p-4 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://i.ibb.co/GQNzmQ9H/Whats-App-Image-2025-07-24-at-14-25-45.jpg" alt="Realizacja projektu kawy z logo klienta 2" class="rounded-lg w-full h-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="kontakt" class="py-16 md:py-24 bg-slate-900 fade-in-section">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-4">Zainteresowany?</h2>
+                <p class="text-lg text-slate-400 text-center mb-12">Wypełnij formularz, a my przygotujemy dla Ciebie indywidualną ofertę. Opowiedz nam o swoich potrzebach.</p>
+                
+                <form id="contact-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" name="name" placeholder="Imię i Nazwisko" required class="form-input w-full p-4 rounded-lg">
+                        <input type="text" name="company" placeholder="Nazwa Firmy (opcjonalnie)" class="form-input w-full p-4 rounded-lg">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="email" name="email" placeholder="Adres e-mail" required class="form-input w-full p-4 rounded-lg">
+                        <input type="tel" name="phone" placeholder="Numer telefonu" required class="form-input w-full p-4 rounded-lg">
+                    </div>
+                    <div>
+                        <textarea name="message" placeholder="Twoja wiadomość, np. szacowana ilość opakowań..." rows="5" class="form-input w-full p-4 rounded-lg"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-secondary px-10 py-4 rounded-full text-lg font-bold">Wyślij Zapytanie</button>
+                    </div>
+                </form>
+                <div id="form-success-message" class="hidden mt-8 p-4 text-center bg-green-900/50 text-green-300 border border-green-700 rounded-lg">
+                    <h3 class="font-bold">Dziękujemy!</h3>
+                    <p>Twoje zapytanie zostało wysłane. Skontaktujemy się z Tobą wkrótce.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0F172A] text-white py-12">
+        <div class="container mx-auto px-6 text-center border-t border-slate-700 pt-12">
+            <img src="https://i.ibb.co/1V6gxCN/70-0-storefront-Images-32e778f9-749e-4a6a-9d71-db416c8ce84d.png" alt="Logo Cafe Zinia" class="h-12 mx-auto mb-6 opacity-80">
+            <p class="mb-4 text-slate-400">Cafe Zinia - Pasja do kawy, inspiracja dla Twojej marki. <br>
+                <a href="https://cafezinia.com/" target="_blank" class="text-orange-500 hover:text-orange-400 transition-colors">Odwiedź nasz sklep</a> po kawę dla siebie.
+            </p>
+            <p class="text-sm text-slate-500">&copy; <span id="year"></span> Cafe Zinia. Wszelkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- GLOBAL VARIABLES ---
+            const packageImageUrl = 'https://i.ibb.co/V0t5LTvs/Paczkka.png';
+            let fabricCanvas;
+            let logoObject = null;
+
+            // --- UI ELEMENTS ---
+            const header = document.getElementById('header');
+            const logoUploadInput = document.getElementById('logo-upload');
+            const logoMessage = document.getElementById('logo-message');
+            const manipulationControls = document.getElementById('manipulation-controls');
+            const scaleSlider = document.getElementById('scale-slider');
+            const rotationSlider = document.getElementById('rotation-slider');
+            const resetButton = document.getElementById('reset-button');
+            const removeButton = document.getElementById('remove-button');
+            const downloadButton = document.getElementById('download-button');
+            const contactForm = document.getElementById('contact-form');
+            const formSuccessMessage = document.getElementById('form-success-message');
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // --- INITIALIZATION ---
+
+            // Initialize both canvases
+            const bgCanvasEl = document.getElementById('canvas-background');
+            const logoCanvasEl = document.getElementById('logo-canvas');
+            const container = document.querySelector('.canvas-container-wrapper');
+
+            // Set background image
+            const bgImg = new Image();
+            bgImg.crossOrigin = "anonymous"; // Important for canvas export
+            bgImg.src = packageImageUrl;
+            bgImg.onload = () => {
+                const aspectRatio = bgImg.naturalWidth / bgImg.naturalHeight;
+                const containerWidth = container.clientWidth;
+                const canvasWidth = containerWidth;
+                const canvasHeight = containerWidth / aspectRatio;
+
+                // Set size for both canvases
+                bgCanvasEl.width = logoCanvasEl.width = canvasWidth;
+                bgCanvasEl.height = logoCanvasEl.height = canvasHeight;
+                
+                const bgCtx = bgCanvasEl.getContext('2d');
+                bgCtx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
+
+                // Initialize Fabric.js on the top canvas
+                fabricCanvas = new fabric.Canvas('logo-canvas', {
+                    width: canvasWidth,
+                    height: canvasHeight,
+                });
+            };
+            
+            // --- EVENT LISTENERS ---
+
+            // Header shrink on scroll
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('bg-slate-900/80', 'backdrop-blur-sm', 'shadow-lg');
+                    header.querySelector('img').classList.remove('md:h-12');
+                    header.querySelector('img').classList.add('md:h-10');
+                } else {
+                    header.classList.remove('bg-slate-900/80', 'backdrop-blur-sm', 'shadow-lg');
+                    header.querySelector('img').classList.remove('md:h-10');
+                    header.querySelector('img').classList.add('md:h-12');
+                }
+            });
+
+            // Logo upload
+            logoUploadInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (f) => {
+                    const data = f.target.result;
+                    fabric.Image.fromURL(data, (img) => {
+                        if (logoObject) {
+                            fabricCanvas.remove(logoObject);
+                        }
+                        
+                        // Scale image to fit canvas initially
+                        const scale = Math.min(
+                            (fabricCanvas.width / img.width) * 0.5,
+                            (fabricCanvas.height / img.height) * 0.5
+                        );
+
+                        logoObject = img.set({
+                            left: fabricCanvas.width / 2,
+                            top: fabricCanvas.height / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            borderColor: '#F97316',
+                            cornerColor: '#F97316',
+                            cornerSize: 10,
+                            transparentCorners: false,
+                            cornerStyle: 'circle',
+                        }).scale(scale);
+
+                        fabricCanvas.add(logoObject);
+                        fabricCanvas.setActiveObject(logoObject);
+                        fabricCanvas.renderAll();
+                        
+                        showControls(file.name);
+                        resetSliders();
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Control sliders
+            scaleSlider.addEventListener('input', (e) => {
+                if (logoObject) {
+                    logoObject.scale(parseFloat(e.target.value)).setCoords();
+                    fabricCanvas.renderAll();
+                }
+            });
+
+            rotationSlider.addEventListener('input', (e) => {
+                if (logoObject) {
+                    logoObject.set('angle', parseInt(e.target.value)).setCoords();
+                    fabricCanvas.renderAll();
+                }
+            });
+            
+            // Update sliders when object is modified on canvas
+            fabricCanvas?.on('object:modified', () => {
+                if (logoObject) {
+                    scaleSlider.value = logoObject.scaleX;
+                    rotationSlider.value = logoObject.angle;
+                }
+            });
+
+            // Control buttons
+            resetButton.addEventListener('click', () => {
+                if (logoObject) {
+                    const originalScale = Math.min(
+                        (fabricCanvas.width / logoObject.width) * 0.5,
+                        (fabricCanvas.height / logoObject.height) * 0.5
+                    );
+                    
+                    logoObject.set({
+                        left: fabricCanvas.width / 2,
+                        top: fabricCanvas.height / 2,
+                        angle: 0,
+                    }).scale(originalScale);
+                    
+                    fabricCanvas.renderAll();
+                    logoObject.setCoords();
+                    resetSliders();
+                }
+            });
+            
+            removeButton.addEventListener('click', () => {
+                if (logoObject) {
+                    fabricCanvas.remove(logoObject);
+                    fabricCanvas.renderAll();
+                    logoObject = null;
+                    hideControls();
+                }
+            });
+
+            // Download preview
+            downloadButton.addEventListener('click', () => {
+                // Create a temporary canvas to merge background and logo
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = bgCanvasEl.width;
+                tempCanvas.height = bgCanvasEl.height;
+                const tempCtx = tempCanvas.getContext('2d');
+
+                // Draw background image
+                tempCtx.drawImage(bgCanvasEl, 0, 0);
+
+                // Draw fabric.js canvas on top
+                // De-select object to hide controls before exporting
+                fabricCanvas.discardActiveObject();
+                fabricCanvas.renderAll();
+                tempCtx.drawImage(fabricCanvas.getElement(), 0, 0);
+
+                // Trigger download
+                const link = document.createElement('a');
+                link.download = 'projekt-kawy-cafe-zinia.png';
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
+            });
+            
+            // Contact form submission
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // In a real application, you would send the data to a server here.
+                // For this demo, we just show a success message.
+                contactForm.style.display = 'none';
+                formSuccessMessage.classList.remove('hidden');
+            });
+            
+            // Fade-in sections on scroll
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+
+            // --- HELPER FUNCTIONS ---
+            function showControls(fileName) {
+                logoMessage.textContent = `Załadowano: ${fileName}`;
+                manipulationControls.classList.remove('hidden');
+            }
+
+            function hideControls() {
+                logoMessage.textContent = 'Nie wybrano pliku.';
+                manipulationControls.classList.add('hidden');
+                logoUploadInput.value = ''; // Reset file input
+            }
+            
+            function resetSliders() {
+                scaleSlider.value = logoObject ? logoObject.scaleX : 1;
+                rotationSlider.value = 0;
+            }
+
+        });
+    </script>
+</body>
+</html>
