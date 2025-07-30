@@ -11,10 +11,10 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts (Poppins for titles) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Fabric.js for Canvas Manipulation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
@@ -27,8 +27,10 @@
             color: #e2e8f0; /* Light Gray Text */
         }
 
+        /* UPDATED: Modern font for titles */
         h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
         }
 
         /* Smooth scroll behavior */
@@ -36,7 +38,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Hero section background - UPDATED */
+        /* Hero section background */
         .hero-section {
             background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://i.ibb.co/MxBG6xvd/DSCF4826.jpg');
             background-size: cover;
@@ -51,26 +53,29 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Custom button styles */
+        /* Custom button styles - UPDATED */
         .btn {
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: inline-block;
             text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
         }
 
         .btn-primary {
-            background-color: #F97316; /* Vibrant Orange */
+            background-color: #D98880; /* Soft Red from image */
             color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .btn-primary:hover {
-            background-color: #EA580C; /* Darker Orange */
+            background-color: #D27D71; /* Darker Soft Red */
         }
         
         .btn-secondary {
@@ -82,19 +87,21 @@
             background-color: #2c4b34;
         }
         
-        /* NEW Outline Button */
+        /* Outline Button - UPDATED */
         .btn-outline {
             background-color: transparent;
-            border: 2px solid #F97316;
-            color: #F97316;
+            border: 2px solid #D98880;
+            color: #D98880;
+            box-shadow: none;
         }
 
         .btn-outline:hover {
-            background-color: #F97316;
+            background-color: #D98880;
             color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Form input styling */
+        /* Form input styling - UPDATED */
         .form-input {
             background-color: #1E293B; /* Dark Slate */
             border: 1px solid #334155; /* Slate Border */
@@ -108,8 +115,8 @@
 
         .form-input:focus {
             outline: none;
-            border-color: #F97316;
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
+            border-color: #D98880;
+            box-shadow: 0 0 0 3px rgba(217, 136, 128, 0.3);
         }
         
         /* Canvas container styling */
@@ -121,6 +128,10 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             border-radius: 1rem;
             overflow: hidden;
+            cursor: grab;
+        }
+        .canvas-container-wrapper:active {
+            cursor: grabbing;
         }
         
         #canvas-background {
@@ -171,7 +182,7 @@
     <section class="hero-section h-screen flex items-center justify-center text-white pt-20">
         <div class="text-center px-4">
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 text-slate-100" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">Kawa z Twoim Logo.</h1>
-            <p class="text-lg md:text-2xl max-w-3xl mx-auto mb-8 text-slate-300" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">Wyróżnij swoją markę z aromatem najlepszej kawy. Stwórz niezapomniany upominek dla klientów i partnerów.</p>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-slate-300" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">Wyróżnij swoją markę z aromatem najlepszej kawy. Stwórz niezapomniany upominek dla klientów i partnerów.</p>
             <a href="#wizualizator" class="btn btn-primary px-8 py-4 rounded-full text-lg font-bold">
                 Zaprojektuj teraz
             </a>
@@ -185,25 +196,25 @@
             <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-12">W trzech prostych krokach stworzysz kawę idealnie dopasowaną do Twojej marki.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="flex flex-col items-center">
-                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                    <div class="bg-[#D98880] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">1. Wgraj logo</h3>
-                    <p class="text-slate-400">Dodaj plik z Twoim logo w formacie PNG lub JPG.</p>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-100">1. Wgraj logo</h3>
+                    <p class="text-slate-400">Dodaj plik z Twoim logo i umieść je na paczce.</p>
                 </div>
                 <div class="flex flex-col items-center">
-                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                    <div class="bg-[#D98880] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">2. Dopasuj projekt</h3>
-                    <p class="text-slate-400">Przesuwaj, skaluj i obracaj logo, aby idealnie pasowało.</p>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-100">2. Dopasuj projekt</h3>
+                    <p class="text-slate-400">Skaluj i obracaj logo, aby idealnie pasowało.</p>
                 </div>
                 <div class="flex flex-col items-center">
-                    <div class="bg-[#F97316] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                    <div class="bg-[#D98880] text-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-2 text-slate-100">3. Wyślij zapytanie</h3>
-                    <p class="text-slate-400">Wypełnij formularz, a my skontaktujemy się z Tobą z ofertą.</p>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-100">3. Wyślij zapytanie</h3>
+                    <p class="text-slate-400">Wypełnij formularz, a my skontaktujemy się z Tobą.</p>
                 </div>
             </div>
         </div>
@@ -234,7 +245,7 @@
                                 <span>Wgraj swoje logo (PNG/JPG)</span>
                                 <input type="file" id="logo-upload" class="hidden" accept="image/png, image/jpeg">
                             </label>
-                            <p id="logo-message" class="text-sm text-center mt-2 text-slate-400">Nie wybrano pliku.</p>
+                            <p id="logo-message" class="text-sm text-center mt-2 text-slate-400">Nie wybrano pliku. Przeciągnij logo, aby je przesunąć.</p>
                         </div>
 
                         <!-- Manipulation Controls -->
@@ -243,12 +254,12 @@
                                 <!-- Scale -->
                                 <div>
                                     <label for="scale-slider" class="block text-sm font-medium text-slate-300 mb-1">Rozmiar</label>
-                                    <input id="scale-slider" type="range" min="0.1" max="3" value="1" step="0.05" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#F97316]">
+                                    <input id="scale-slider" type="range" min="0.1" max="3" value="1" step="0.05" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#D98880]">
                                 </div>
                                 <!-- Rotation -->
                                 <div>
                                     <label for="rotation-slider" class="block text-sm font-medium text-slate-300 mb-1">Obrót</label>
-                                    <input id="rotation-slider" type="range" min="-180" max="180" value="0" step="1" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#F97316]">
+                                    <input id="rotation-slider" type="range" min="-180" max="180" value="0" step="1" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-[#D98880]">
                                 </div>
                             </div>
                             
@@ -266,7 +277,7 @@
         </div>
     </section>
     
-    <!-- NEW: Our Projects Section -->
+    <!-- Our Projects Section -->
     <section id="realizacje" class="py-16 md:py-24 bg-slate-800 fade-in-section">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-12">Nasze Realizacje</h2>
@@ -317,7 +328,7 @@
         <div class="container mx-auto px-6 text-center border-t border-slate-700 pt-12">
             <img src="https://i.ibb.co/1V6gxCN/70-0-storefront-Images-32e778f9-749e-4a6a-9d71-db416c8ce84d.png" alt="Logo Cafe Zinia" class="h-12 mx-auto mb-6 opacity-80">
             <p class="mb-4 text-slate-400">Cafe Zinia - Pasja do kawy, inspiracja dla Twojej marki. <br>
-                <a href="https://cafezinia.com/" target="_blank" class="text-orange-500 hover:text-orange-400 transition-colors">Odwiedź nasz sklep</a> po kawę dla siebie.
+                <a href="https://cafezinia.com/" target="_blank" style="color: #D98880;" class="hover:underline transition-colors">Odwiedź nasz sklep</a> po kawę dla siebie.
             </p>
             <p class="text-sm text-slate-500">&copy; <span id="year"></span> Cafe Zinia. Wszelkie prawa zastrzeżone.</p>
         </div>
@@ -357,7 +368,10 @@
             bgImg.src = packageImageUrl;
             bgImg.onload = () => {
                 const aspectRatio = bgImg.naturalWidth / bgImg.naturalHeight;
-                const containerWidth = container.clientWidth;
+                let containerWidth = container.clientWidth;
+                // On small screens, ensure canvas is not too small
+                if (containerWidth < 300) containerWidth = 300;
+                
                 const canvasWidth = containerWidth;
                 const canvasHeight = containerWidth / aspectRatio;
 
@@ -414,8 +428,8 @@
                             top: fabricCanvas.height / 2,
                             originX: 'center',
                             originY: 'center',
-                            borderColor: '#F97316',
-                            cornerColor: '#F97316',
+                            borderColor: '#D98880',
+                            cornerColor: '#D98880',
                             cornerSize: 10,
                             transparentCorners: false,
                             cornerStyle: 'circle',
@@ -534,12 +548,12 @@
 
             // --- HELPER FUNCTIONS ---
             function showControls(fileName) {
-                logoMessage.textContent = `Załadowano: ${fileName}`;
+                logoMessage.textContent = `Załadowano: ${fileName}. Przesuwaj logo, aby je dopasować.`;
                 manipulationControls.classList.remove('hidden');
             }
 
             function hideControls() {
-                logoMessage.textContent = 'Nie wybrano pliku.';
+                logoMessage.textContent = 'Nie wybrano pliku. Przeciągnij logo, aby je przesunąć.';
                 manipulationControls.classList.add('hidden');
                 logoUploadInput.value = ''; // Reset file input
             }
