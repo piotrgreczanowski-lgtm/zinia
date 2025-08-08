@@ -21,7 +21,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 
     <style>
-        /* Custom Styles for a Premium Feel */
         body { font-family: 'Manrope', sans-serif; background-color: #0F172A; color: #e2e8f0; }
         h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 600; }
         html { scroll-behavior: smooth; }
@@ -47,6 +46,9 @@
         details[open] summary svg { transform: rotate(180deg); }
         summary { cursor: pointer; list-style: none; }
         summary::-webkit-details-marker { display:none; }
+        /* Video */
+        .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 0.75rem; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,.4); }
+        .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
     </style>
 </head>
 <body class="bg-slate-900">
@@ -131,17 +133,14 @@
         <div class="container mx-auto px-6">
             <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-12">Stwórz Swój Projekt</h2>
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
-                <!-- Canvas Area -->
                 <div class="w-full lg:w-1/2 flex justify-center items-center">
                     <div class="canvas-container-wrapper">
                          <canvas id="logo-canvas"></canvas>
                     </div>
                 </div>
-                <!-- Controls Area -->
                 <div class="w-full lg:w-1/2">
                     <div class="glass-controls p-6 md:p-8 rounded-2xl">
                         <h3 class="text-2xl font-semibold mb-6 text-slate-100">Panel Sterowania</h3>
-                        <!-- File Upload -->
                         <div class="mb-6">
                             <label for="logo-upload" class="btn btn-secondary w-full text-center py-3 px-4 rounded-lg cursor-pointer">
                                 <span>Wgraj swoje logo (PNG/JPG)</span>
@@ -149,7 +148,6 @@
                             </label>
                             <p id="logo-message" class="text-sm text-center mt-2 text-slate-400">Nie wybrano pliku. Przeciągnij logo, aby je przesunąć.</p>
                         </div>
-                        <!-- Manipulation Controls -->
                         <div id="manipulation-controls" class="hidden">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                 <div>
@@ -191,6 +189,19 @@
         </div>
     </section>
 
+    <!-- Video Section -->
+    <section id="video" class="py-16 md:py-24 bg-slate-900 fade-in-section">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-100 mb-4">Zobacz w 30 sekund</h2>
+                <p class="text-lg text-slate-400 mb-8">Krótki film pokazujący efekt końcowy i detale wykonania.</p>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/E2dUoyfOia4" title="Cafe Zinia - krótkie wideo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Pricing (Slider) Section -->
     <section id="wycena" class="py-16 md:py-24 bg-slate-900 fade-in-section">
         <div class="container mx-auto px-6">
@@ -222,7 +233,45 @@
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- Contact Form Section -->
+    <section id="kontakt" class="py-16 md:py-24 bg-slate-900 fade-in-section">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl md:4xl font-bold text-center text-slate-100 mb-4">Zainteresowany?</h2>
+                <p class="text-lg text-slate-400 text-center mb-12">Wypełnij formularz, a przygotujemy indywidualną ofertę. Napisz nam, czego potrzebujesz.</p>
+                <form id="contact-form" class="space-y-6" data-endpoint="https://formspree.io/f/XXXXXX" method="POST">
+                    <!-- TODO: Podmień XXXXXX na swój ID formularza z Formspree (lub wyślę Ci gotowy) -->
+                    <input type="hidden" name="_subject" value="Zapytanie B2B – Kawa z logo (Cafe Zinia)">
+                    <input type="hidden" name="estimated_qty" id="estimated_qty" value="50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" name="name" placeholder="Imię i nazwisko" required class="form-input w-full p-4 rounded-lg">
+                        <input type="text" name="company" placeholder="Nazwa firmy (opcjonalnie)" class="form-input w-full p-4 rounded-lg">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="email" name="email" placeholder="Adres e‑mail" required class="form-input w-full p-4 rounded-lg">
+                        <input type="tel" name="phone" placeholder="Numer telefonu" required class="form-input w-full p-4 rounded-lg">
+                    </div>
+                    <div>
+                        <textarea name="message" placeholder="Twoja wiadomość, np. liczba opakowań, rodzaj kawy, terminy…" rows="5" class="form-input w-full p-4 rounded-lg"></textarea>
+                    </div>
+                    <div class="text-center flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
+                        <button type="submit" class="btn btn-secondary px-10 py-4 rounded-full text-lg font-bold">Poproś o wycenę</button>
+                        <a href="mailto:hello@cafezinia.com?subject=Zapytanie%20B2B%20Cafe%20Zinia&body=Cześć!%20Interesuje%20mnie%20kawa%20z%20logo.%20Proszę%20o%20kontakt." class="btn btn-outline px-10 py-4 rounded-full text-lg font-bold">Napisz maila</a>
+                    </div>
+                </form>
+                <div id="form-success-message" class="hidden mt-8 p-4 text-center bg-green-900/50 text-green-300 border border-green-700 rounded-lg">
+                    <h3 class="font-bold">Dziękujemy!</h3>
+                    <p>Twoje zapytanie zostało wysłane. Skontaktujemy się z Tobą wkrótce.</p>
+                </div>
+                <div id="form-error-message" class="hidden mt-8 p-4 text-center bg-red-900/50 text-red-200 border border-red-700 rounded-lg">
+                    <h3 class="font-bold">Ups…</h3>
+                    <p>Wystąpił problem z wysłaniem. Spróbuj ponownie lub napisz do nas bezpośrednio: <a href="mailto:hello@cafezinia.com" class="underline">hello@cafezinia.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section (moved below contact) -->
     <section id="faq" class="py-16 md:py-24 bg-slate-800 fade-in-section">
         <div class="container mx-auto px-6 max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-100 mb-10">Najczęściej zadawane pytania</h2>
@@ -267,36 +316,6 @@
         </div>
     </section>
 
-    <!-- Contact Form Section -->
-    <section id="kontakt" class="py-16 md:py-24 bg-slate-900 fade-in-section">
-        <div class="container mx-auto px-6">
-            <div class="max-w-3xl mx-auto">
-                <h2 class="text-3xl md:4xl font-bold text-center text-slate-100 mb-4">Zainteresowany?</h2>
-                <p class="text-lg text-slate-400 text-center mb-12">Wypełnij formularz, a przygotujemy indywidualną ofertę. Napisz nam, czego potrzebujesz.</p>
-                <form id="contact-form" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input type="text" name="name" placeholder="Imię i nazwisko" required class="form-input w-full p-4 rounded-lg">
-                        <input type="text" name="company" placeholder="Nazwa firmy (opcjonalnie)" class="form-input w-full p-4 rounded-lg">
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input type="email" name="email" placeholder="Adres e‑mail" required class="form-input w-full p-4 rounded-lg">
-                        <input type="tel" name="phone" placeholder="Numer telefonu" required class="form-input w-full p-4 rounded-lg">
-                    </div>
-                    <div>
-                        <textarea name="message" placeholder="Twoja wiadomość, np. liczba opakowań, rodzaj kawy, terminy…" rows="5" class="form-input w-full p-4 rounded-lg"></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-secondary px-10 py-4 rounded-full text-lg font-bold">Poproś o wycenę</button>
-                    </div>
-                </form>
-                <div id="form-success-message" class="hidden mt-8 p-4 text-center bg-green-900/50 text-green-300 border border-green-700 rounded-lg">
-                    <h3 class="font-bold">Dziękujemy!</h3>
-                    <p>Twoje zapytanie zostało wysłane. Skontaktujemy się z Tobą wkrótce.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="bg-[#0F172A] text-white py-12">
         <div class="container mx-auto px-6 text-center border-t border-slate-700 pt-12">
@@ -326,6 +345,8 @@
             const downloadButton = document.getElementById('download-button');
             const contactForm = document.getElementById('contact-form');
             const formSuccessMessage = document.getElementById('form-success-message');
+            const formErrorMessage = document.getElementById('form-error-message');
+            const estimateQtyHidden = document.getElementById('estimated_qty');
             document.getElementById('year').textContent = new Date().getFullYear();
 
             // Pricing elements
@@ -341,6 +362,7 @@
                 qtyValue.textContent = qty;
                 unitPriceEl.textContent = fmt.format(UNIT_PRICE);
                 totalPriceEl.textContent = fmt.format(qty * UNIT_PRICE);
+                if(estimateQtyHidden) estimateQtyHidden.value = qty;
             }
 
             if(qtySlider){
@@ -349,7 +371,6 @@
             }
 
             // --- INITIALIZATION ---
-            const logoCanvasEl = document.getElementById('logo-canvas');
             const container = document.querySelector('.canvas-container-wrapper');
             let containerWidth = container.clientWidth; if (containerWidth < 300) containerWidth = 300;
             fabricCanvas = new fabric.Canvas('logo-canvas', { width: containerWidth, height: containerWidth });
@@ -409,7 +430,27 @@
                 if(!fabricCanvas) return; fabricCanvas.discardActiveObject(); fabricCanvas.renderAll();
                 const link = document.createElement('a'); link.download = 'projekt-kawy-cafe-zinia.png'; link.href = fabricCanvas.toDataURL({ format:'png', quality:1.0 }); link.click();
             });
-            contactForm?.addEventListener('submit', (e) => { e.preventDefault(); contactForm.style.display = 'none'; formSuccessMessage.classList.remove('hidden'); });
+
+            // Contact form submit (Formspree)
+            contactForm?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                formSuccessMessage.classList.add('hidden');
+                formErrorMessage.classList.add('hidden');
+                const endpoint = contactForm.getAttribute('data-endpoint');
+                try {
+                    const formData = new FormData(contactForm);
+                    const res = await fetch(endpoint, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+                    if (res.ok) {
+                        contactForm.reset();
+                        contactForm.style.display = 'none';
+                        formSuccessMessage.classList.remove('hidden');
+                    } else {
+                        throw new Error('Błąd wysyłki');
+                    }
+                } catch (err) {
+                    formErrorMessage.classList.remove('hidden');
+                }
+            });
 
             // Fade-in sections on scroll
             const sections = document.querySelectorAll('.fade-in-section');
